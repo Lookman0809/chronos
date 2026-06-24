@@ -1,58 +1,79 @@
+// ════════════════════════════════════════
+// CHRONOS — Service Worker v1.3.0
+// Stratégie : HTML toujours depuis le réseau
+// ════════════════════════════════════════
 const CACHE = 'chronos-v1.3.0';
-const ASSETS = [
-  '/chronos/',
-  '/chronos/index.html',
-  '/chronos/manifest.webmanifest',
+const STATIC = [
   '/chronos/icon-180.png',
   '/chronos/icon-192.png',
-  '/chronos/icon-512.png'
+  '/chronos/icon-512.png',
+  '/chronos/manifest.webmanifest'
 ];
 
-// Installation : mise en cache des ressources principales
 self.addEventListener('install', e => {
+  // Prendre le contrôle immédiatement sans attendre
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS))
+    caches.open(CACHE)
+      .then(c => c.addAll(STATIC))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-// Activation : supprimer les anciens caches
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-    ))
+    Promise.all([
+      // Supprimer TOUS les anciens caches
+      caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      ),
+      // Prendre le contrôle de tous les onglets ouverts
+      self.clients.claim()
+    ])
   );
-  self.clients.claim();
 });
 
-// Fetch : network first pour version.json, cache first pour le reste
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('version.json')) {
-    // Toujours essayer le réseau pour la vérification MAJ
+  const url = e.request.url;
+
+  // ── HTML principal : TOUJOURS depuis le réseau ──
+  if (url.endsWith('/chronos/') ||
+      url.endsWith('/chronos') ||
+      url.includes('index.html')) {
     e.respondWith(
-      fetch(e.request).catch(() => caches.match(e.request))
+      fetch(e.request, { cache: 'no-store' })
+        .catch(() => caches.match('/chronos/'))
     );
     return;
   }
-  if (e.request.url.includes('fonts.googleapis') ||
-      e.request.url.includes('fonts.gstatic') ||
-      e.request.url.includes('jsdelivr') ||
-      e.request.url.includes('cdn.')) {
-    // CDN : network first avec fallback cache
+
+  // ── version.json : TOUJOURS depuis le réseau ──
+  if (url.includes('version.json')) {
     e.respondWith(
-      fetch(e.request)
-        .then(r => {
+      fetch(e.request, { cache: 'no-store' })
+        .catch(() => new Response('{}'))
+    );
+    return;
+  }
+
+  // ── Icônes et manifest : cache first ──
+  if (url.includes('icon-') || url.includes('manifest')) {
+    e.respondWith(
+      caches.match(e.request)
+        .then(r => r || fetch(e.request))
+    );
+    return;
+  }
+
+  // ── CDN (fonts, SheetJS, JSZip) : réseau first avec cache fallback ──
+  e.respondWith(
+    fetch(e.request)
+      .then(r => {
+        if (r.ok) {
           const clone = r.clone();
           caches.open(CACHE).then(c => c.put(e.request, clone));
-          return r;
-        })
-        .catch(() => caches.match(e.request))
-    );
-    return;
-  }
-  // Ressources locales : cache first
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
+        }
+        return r;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
