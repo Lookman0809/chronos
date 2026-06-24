@@ -3412,7 +3412,7 @@ document.addEventListener('DOMContentLoaded',init);
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/chronos/sw.js');
+    navigator.serviceWorker.register('/chronos/sw.js',{updateViaCache:'none'});
   });
 }
 </script>
