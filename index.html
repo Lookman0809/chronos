@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Chronos">
 <link rel="apple-touch-icon" href="icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -222,18 +223,6 @@ input,select,textarea{font-family:inherit}
 .ob-skip{font-size:12px;color:var(--t4);text-align:center;margin-top:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .ob-skip:hover{color:var(--t2)}
 
-.dev-badge{display:inline-block;padding:2px 8px;background:rgba(244,63,94,.15);border:1px solid rgba(244,63,94,.3);border-radius:10px;font-size:10px;font-weight:700;color:#f43f5e;letter-spacing:.06em}
-.tkt-card{background:var(--bg-700);border:1px solid var(--b1);border-radius:var(--r3);padding:16px 18px;margin-bottom:12px}
-.tkt-hd{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.tkt-type{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.05em}
-.tkt-date{font-size:11.5px;color:var(--t4);margin-left:auto}
-.tkt-desc{font-size:13.5px;color:var(--t2);line-height:1.5;margin-bottom:10px}
-.tkt-meta{font-size:12px;color:var(--t4);display:flex;gap:14px;flex-wrap:wrap}
-.tkt-actions{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--b0)}
-.tkt-stat{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
-.stat-new{background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid rgba(96,165,250,.3)}
-.stat-done{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
-.stat-wip{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
 /* Toast */
 #toast{position:fixed;bottom:22px;right:22px;background:var(--bg-700);border:1px solid var(--b2);border-radius:var(--r3);padding:11px 18px;font-size:13.5px;color:var(--t1);box-shadow:var(--sh3);transform:translateY(80px);opacity:0;transition:all .3s ease;z-index:400;display:flex;align-items:center;gap:9px}
 #toast.show{transform:translateY(0);opacity:1}
@@ -328,8 +317,6 @@ input,select,textarea{font-family:inherit}
     <div class="ni" onclick="sv('journal')" data-v="journal"><span class="ni-ico">📓</span><span>Journal</span></div>
     <div class="ni" onclick="sv('sparte')" data-v="sparte"><span class="ni-ico"><img src="data:image/jpeg;base64,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" style="width:14px;height:14px;object-fit:contain;vertical-align:middle;border-radius:2px"></span><span>SPARTE</span></div>
     <div class="ni" onclick="sv('astuces')" data-v="astuces"><span class="ni-ico">💡</span><span>Astuces</span></div>
-    <div class="ni" onclick="sv('contact')" data-v="contact"><span class="ni-ico">✉️</span><span>Contact</span></div>
-    <div class="ni" id="ni-dev" onclick="sv('dev')" data-v="dev" style="display:none"><span class="ni-ico">🔧</span><span>DEV <span class="dev-badge">DEV</span></span></div>
   </div>
   <div style="padding:0 10px 8px"><div class="ni" onclick="sv('settings')" data-v="settings"><span class="ni-ico">⚙</span><span>Paramètres</span></div></div>
   <div class="sb-bal" id="sb-bal"></div>
@@ -538,39 +525,6 @@ input,select,textarea{font-family:inherit}
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="view-contact" class="view">
-  <div class="ph"><div><h1 class="pt">Contact</h1><p class="ps">Signalez un bug, proposez une amélioration ou posez une question</p></div></div>
-  <div class="ca" style="max-width:600px">
-    <div class="stsec">
-      <div class="stlbl">Nouveau message</div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="ob-row"><label class="ob-lbl">Type</label>
-          <select class="ob-inp" id="tkt-type" style="width:100%">
-            <option value="bug">🐛 Signaler un bug</option>
-            <option value="amelioration">💡 Proposer une amélioration</option>
-            <option value="question">❓ Poser une question</option>
-            <option value="autre">💬 Autre</option>
-          </select>
-        </div>
-        <div class="ob-row"><label class="ob-lbl">Description <span style="color:#f43f5e">*</span></label>
-          <textarea class="ob-inp" id="tkt-desc" rows="4" placeholder="Décrivez votre message..." style="width:100%;box-sizing:border-box;resize:vertical;min-height:90px;font-family:'DM Sans',sans-serif"></textarea>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div class="ob-row"><label class="ob-lbl">Prénom <span style="font-weight:400;opacity:.6">(optionnel)</span></label>
-            <input class="ob-inp" id="tkt-prenom" type="text" placeholder="Votre prénom">
-          </div>
-          <div class="ob-row"><label class="ob-lbl">Email ou tél. <span style="font-weight:400;opacity:.6">(optionnel)</span></label>
-            <input class="ob-inp" id="tkt-contact" type="text" placeholder="Pour vous répondre">
-          </div>
-        </div>
-        <div class="ob-note">🔒 Anonyme par défaut — les coordonnées sont optionnelles.</div>
-      </div>
-      <button class="btn btn-p" id="tkt-submit-btn" style="width:100%;justify-content:center;margin-top:18px;padding:13px" onclick="submitTicket()">Envoyer</button>
-    </div>
-  </div>
-</section>
-
 <!-- ASTUCES -->
 <section id="view-astuces" class="view">
   <div class="ph"><div><h1 class="pt">Astuces</h1><p class="ps">Conseils et raccourcis pour utiliser Chronos efficacement</p></div></div>
@@ -629,25 +583,6 @@ input,select,textarea{font-family:inherit}
       Chronos <span id="app-ver2"></span> — Le planning intelligent
     </div>
 
-  </div>
-</section>
-
-<!-- DEV -->
-<section id="view-dev" class="view">
-  <div class="ph">
-    <div><h1 class="pt">DEV <span class="dev-badge" style="vertical-align:middle">DEV</span></h1><p class="ps">Tickets utilisateurs</p></div>
-    <button class="btn btn-g btn-sm" onclick="loadTickets()">↺ Actualiser</button>
-  </div>
-  <div class="ca" style="max-width:820px">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
-      <button onclick="filterTickets('all')" id="tf-all" class="btn btn-p btn-sm">Tous</button>
-      <button onclick="filterTickets('Nouveau')" id="tf-new" class="btn btn-g btn-sm">🔵 Nouveaux</button>
-      <button onclick="filterTickets('En cours')" id="tf-wip" class="btn btn-g btn-sm">🟡 En cours</button>
-      <button onclick="filterTickets('Traité')" id="tf-done" class="btn btn-g btn-sm">🟢 Traités</button>
-    </div>
-    <div id="dev-tickets-list">
-      <div class="empty"><div class="empty-ico">🎫</div><div class="empty-t">Cliquez sur Actualiser pour charger les tickets</div></div>
-    </div>
   </div>
 </section>
 
@@ -810,7 +745,7 @@ const WFR=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 // ════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════
-const APP_VERSION='1.3.0';
+const APP_VERSION='1.2.0';
 let S={
   settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[]},
   events:[],
@@ -2627,7 +2562,6 @@ function sv(v){
   else if(v==='export')renderExport();
   else if(v==='journal')renderJournal();
   else if(v==='astuces'){document.getElementById('app-ver').textContent=APP_VERSION;document.getElementById('app-ver2').textContent='v'+APP_VERSION;}
-  else if(v==='dev'){if(isDevMode)loadTickets();}
   else if(v==='settings'){loadSett();}
 }
 function renderAll(){
@@ -2774,128 +2708,6 @@ function ydcClick(ds){
 // ════════════════════════════════════════
 // VÉRIFICATION MAJ
 // ════════════════════════════════════════
-// ════ CONFIG DEV ════
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwF5YmIDmwjpLy5LzMGBcWJoBIatNB96TylMTh2BRi_99iNnNbJ8wbcKuVsTz5h3-6PDA/exec';
-const DEV_TOKEN='CHRONOS_DEV_2026';
-let isDevMode=false,ticketsCache=[],ticketFilter='all';
-
-function checkDevHash(){
-  if(window.location.hash==='#dev'){
-    const ov=document.getElementById('dev-login-overlay');
-    if(ov){ov.style.display='flex';setTimeout(()=>document.getElementById('dev-nni-input')?.focus(),100);}
-    history.replaceState(null,'',window.location.pathname);
-  }
-}
-
-function checkDevAccess(){
-  const input=document.getElementById('dev-nni-input')?.value?.trim()?.toUpperCase();
-  const ov=document.getElementById('dev-login-overlay');
-  if(ov)ov.style.display='none';
-  if(!input)return;
-  if(input===(S.settings.nni||'').toUpperCase()){
-    isDevMode=true;
-    const ni=document.getElementById('ni-dev');
-    if(ni)ni.style.display='flex';
-    sv('dev');
-    toast('DEV','Mode DEV active');
-  }
-  const inp=document.getElementById('dev-nni-input');
-  if(inp)inp.value='';
-}
-
-async function submitTicket(){
-  const desc=document.getElementById('tkt-desc')?.value?.trim();
-  if(!desc){toast('Alerte','Description requise');return;}
-  const btn=document.getElementById('tkt-submit-btn');
-  if(btn){btn.disabled=true;btn.textContent='Envoi...';}
-  const data={
-    type:document.getElementById('tkt-type')?.value||'autre',
-    description:desc,
-    prenom:document.getElementById('tkt-prenom')?.value?.trim()||'',
-    contact:document.getElementById('tkt-contact')?.value?.trim()||''
-  };
-  try{await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)});}
-  catch(e){}
-  ['tkt-desc','tkt-prenom','tkt-contact'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  if(btn){btn.disabled=false;btn.textContent='Envoyer';}
-  toast('OK','Message envoye !');
-}
-
-async function loadTickets(){
-  const el=document.getElementById('dev-tickets-list');
-  if(el)el.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-t">Chargement...</div></div>';
-  try{
-    const res=await fetch(SCRIPT_URL+'?token='+DEV_TOKEN+'&t='+Date.now());
-    const data=await res.json();
-    if(!data.success)throw new Error(data.error||'Erreur');
-    ticketsCache=data.tickets||[];
-    renderTickets();
-  }catch(e){
-    if(el)el.innerHTML='<div class="empty"><div class="empty-ico">!</div><div class="empty-t">Erreur de chargement</div></div>';
-  }
-}
-
-function filterTickets(f){
-  ticketFilter=f;
-  const map={all:'tf-all',Nouveau:'tf-new','En cours':'tf-wip','Traité':'tf-done'};
-  Object.entries(map).forEach(([k,id])=>{
-    const btn=document.getElementById(id);
-    if(btn)btn.className=(k===f)?'btn btn-p btn-sm':'btn btn-g btn-sm';
-  });
-  renderTickets();
-}
-
-function renderTickets(){
-  const el=document.getElementById('dev-tickets-list');if(!el)return;
-  const list=ticketFilter==='all'?ticketsCache:ticketsCache.filter(t=>t.statut===ticketFilter);
-  if(!list.length){el.innerHTML='<div class="empty"><div class="empty-ico">ø</div><div class="empty-t">Aucun ticket</div></div>';return;}
-  const tL={bug:'Bug',amelioration:'Amelioration',question:'Question',autre:'Autre'};
-  const tC={bug:'rgba(244,63,94,.2)',amelioration:'rgba(96,165,250,.2)',question:'rgba(251,191,36,.2)',autre:'rgba(161,161,170,.2)'};
-  const tT={bug:'#f43f5e',amelioration:'#60a5fa',question:'#fbbf24',autre:'#a1a1aa'};
-  el.innerHTML=list.map(t=>{
-    const typ=tL[t.type]||t.type;
-    const bc=tC[t.type]||tC.autre;
-    const tc=tT[t.type]||tT.autre;
-    const st=t.statut==='Traité'?'done':t.statut==='En cours'?'wip':'new';
-    const prn=t.prenom?('<span>'+t.prenom+'</span>')  :'';
-    const cnt=t.contact?('<span>'+t.contact+'</span>')  :'';
-    const btnEC=t.statut!=='En cours'?('<button class="btn btn-g btn-sm" onclick="updateTicket('+t.id+',\'En cours\')">En cours</button>')  :'';
-    const btnTr=t.statut!=='Traité'?('<button class="btn btn-g btn-sm" onclick="updateTicket('+t.id+',\'Traité\')">Traité</button>')  :'';
-    const btnRo=t.statut!=='Nouveau'?('<button class="btn btn-g btn-sm" onclick="updateTicket('+t.id+',\'Nouveau\')">Rouvrir</button>')  :'';
-    return '<div class="tkt-card">'
-      +'<div class="tkt-hd">'
-      +'<span class="tkt-type" style="background:'+bc+';color:'+tc+'">'+typ+'</span>'
-      +'<span class="tkt-stat stat-'+st+'">'+( t.statut||'Nouveau')+'</span>'
-      +'<span class="tkt-date">'+t.date+'</span>'
-      +'</div>'
-      +'<div class="tkt-desc">'+t.description+'</div>'
-      +'<div class="tkt-meta">'+prn+cnt+'</div>'
-      +'<div class="tkt-actions">'+btnEC+btnTr+btnRo
-      +'<button class="btn btn-sm" style="margin-left:auto;background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#f43f5e" onclick="deleteTicket('+t.id+')">Suppr.</button>'
-      +'</div></div>';
-  }).join('');
-}
-
-async function updateTicket(id,statut){
-  try{
-    await fetch(SCRIPT_URL+'?token='+DEV_TOKEN+'&action=update&id='+id+'&statut='+encodeURIComponent(statut));
-    const t=ticketsCache.find(x=>x.id===id);if(t)t.statut=statut;
-    renderTickets();
-  }catch(e){}
-}
-
-async function deleteTicket(id){
-  showConfirm('Suppr','Supprimer ce ticket ?','Supprimer',async()=>{
-    try{
-      await fetch(SCRIPT_URL+'?token='+DEV_TOKEN+'&action=delete&id='+id);
-      ticketsCache=ticketsCache.filter(x=>x.id!==id);
-      renderTickets();
-    }catch(e){}
-  });
-}
-
-// ════ FIN CONFIG DEV ════
-
 async function checkUpdate(){
   try{
     const res=await fetch('https://lookman0809.github.io/chronos/version.json?t='+Date.now(),{cache:'no-store'});
@@ -3352,7 +3164,6 @@ function init(){
   if(document.getElementById('s-ca-detail'))updContrat();
   // Vérifier les mises à jour (silencieux)
   setTimeout(checkUpdate, 1500);
-  checkDevHash();
   // Premier lancement : aucun profil configuré
   const s=S.settings;
   if(!s.userName&&!s.nni&&!s.hireDate){
@@ -3362,14 +3173,6 @@ function init(){
 }
 document.addEventListener('DOMContentLoaded',init);
 </script>
-
-<!-- DEV LOGIN -->
-<div id="dev-login-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center">
-  <div style="background:var(--bg-700);border:1px solid var(--b1);border-radius:var(--r4);padding:32px;max-width:340px;width:90%;text-align:center">
-    <input class="ob-inp" id="dev-nni-input" type="password" placeholder="••••••••" autocomplete="off" style="width:100%;box-sizing:border-box;font-size:20px;letter-spacing:.2em;text-align:center;margin-bottom:14px" onkeydown="if(event.key==='Enter')checkDevAccess()">
-    <button class="btn btn-p" style="width:100%;justify-content:center;padding:11px" onclick="checkDevAccess()">Continuer</button>
-  </div>
-</div>
 
 <!-- ONBOARDING -->
 <div id="ob-overlay" class="ob-overlay" style="display:none">
@@ -3412,7 +3215,9 @@ document.addEventListener('DOMContentLoaded',init);
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/chronos/sw.js',{updateViaCache:'none'});
+    navigator.serviceWorker.register('/chronos/sw.js')
+      .then(r=>console.log('Chronos SW enregistré',r.scope))
+      .catch(e=>console.log('SW erreur:',e));
   });
 }
 </script>
