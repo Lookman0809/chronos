@@ -731,13 +731,15 @@ input,select,textarea{font-family:inherit}
         <div class="gh-guide">
           <ol>
             <li>Crée un compte sur <a href="https://github.com" target="_blank">github.com</a> si tu n'en as pas</li>
-            <li>Crée un nouveau dépôt <strong>public ou privé</strong> nommé <code>chronos-data</code></li>
-            <li>Va dans <a href="https://github.com/settings/tokens/new" target="_blank">Paramètres → Tokens → Nouveau token</a></li>
-            <li>Nom : <code>Chronos</code> — coche uniquement <strong>repo</strong> → Générer</li>
-            <li>Copie le token (<code>ghp_...</code>) et colle-le ci-dessus</li>
+            <li>Crée un nouveau dépôt <strong>public ou privé</strong> nommé <code>chronos-data</code> — initialise-le avec un README</li>
+            <li>Va dans <a href="https://github.com/settings/tokens?type=beta" target="_blank">Paramètres → Developer settings → Fine-grained tokens → Generate new token</a></li>
+            <li>Nom : <code>Chronos</code> — Expiration : selon ta préférence</li>
+            <li>Dans <strong>Repository access</strong> → sélectionne <strong>Only select repositories</strong> → choisis <code>chronos-data</code></li>
+            <li>Dans <strong>Permissions → Repository permissions → Contents</strong> → mets <strong>Read and write</strong></li>
+            <li>Clique <strong>Generate token</strong>, copie le token (<code>github_pat_...</code>) et colle-le ci-dessus</li>
             <li>Entre ton dépôt au format <code>username/chronos-data</code></li>
           </ol>
-          <div style="margin-top:8px;color:var(--t4)">⚠️ Le token n'est jamais exporté ni partagé — il reste uniquement sur cet appareil.</div>
+          <div style="margin-top:8px;color:var(--t4)">⚠️ Le token n'est jamais exporté ni partagé — il reste uniquement sur cet appareil.<br>💡 Fine-grained token = accès limité à ce seul dépôt, plus sécurisé qu'un token classique.</div>
         </div>
       </details>
     </div>
@@ -2948,7 +2950,7 @@ function ghApiUrl(path) {
   return 'https://api.github.com/repos/' + S.settings.githubRepo + '/contents/' + path;
 }
 function ghHeaders() {
-  return { 'Authorization': 'token ' + S.settings.githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' };
+  return { 'Authorization': 'Bearer ' + S.settings.githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
 }
 function b64Encode(str) {
   return btoa(unescape(encodeURIComponent(str)));
@@ -2972,25 +2974,40 @@ function setSyncStatus(state, msg) {
 }
 
 async function ghGetFile(path) {
-  const res = await fetch(ghApiUrl(path), { headers: ghHeaders() });
+  let res;
+  try { res = await fetch(ghApiUrl(path), { headers: ghHeaders() }); }
+  catch(e) { throw new Error('Réseau inaccessible — vérifiez votre connexion internet'); }
   if (res.status === 404) return null;
+  if (res.status === 401) throw new Error('Token invalide ou expiré');
+  if (res.status === 403) throw new Error('Accès refusé — vérifiez les permissions du token (Contents: Read and write)');
   if (!res.ok) throw new Error('GitHub ' + res.status);
   const data = await res.json();
-  return { content: JSON.parse(b64Decode(data.content)), sha: data.sha };
+  try { return { content: JSON.parse(b64Decode(data.content)), sha: data.sha }; }
+  catch(e) { return null; }
 }
 
 async function ghPutFile(path, content, sha) {
-  const body = { message: 'Chronos sync ' + todayStr(), content: b64Encode(JSON.stringify(content)) };
+  const body = { message: 'Chronos sync ' + todayStr(), content: b64Encode(JSON.stringify(content, null, 2)) };
   if (sha) body.sha = sha;
-  const res = await fetch(ghApiUrl(path), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
-  if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'GitHub ' + res.status); }
+  let res;
+  try { res = await fetch(ghApiUrl(path), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) }); }
+  catch(e) { throw new Error('Réseau inaccessible — vérifiez votre connexion internet'); }
+  if (!res.ok) {
+    let msg = 'GitHub ' + res.status;
+    try { const err = await res.json(); msg = err.message || msg; } catch(e2) {}
+    if (res.status === 401) msg = 'Token invalide ou expiré';
+    if (res.status === 404) msg = 'Dépôt introuvable — vérifiez le nom';
+    if (res.status === 409) msg = 'Conflit — réessayez';
+    if (res.status === 422) msg = 'SHA incorrect — rechargez et réessayez';
+    throw new Error(msg);
+  }
 }
 
 async function testGitHubConnection() {
   if (!S.settings.githubRepo || !S.settings.githubToken) { toast('!', 'Dépôt et token requis'); return; }
   setSyncStatus('ing', 'Test...');
   try {
-    const res = await fetch('https://api.github.com/repos/' + S.settings.githubRepo, { headers: ghHeaders() });
+    let res; try { res = await fetch('https://api.github.com/repos/' + S.settings.githubRepo, { headers: ghHeaders() }); } catch(e) { setSyncStatus('err', 'Réseau inaccessible'); toast('!', 'Erreur réseau — vérifiez votre connexion'); return; }
     if (res.ok) { setSyncStatus('ok', 'Connexion OK'); toast('✓', 'Connexion GitHub OK'); }
     else if (res.status === 404) { setSyncStatus('err', 'Dépôt introuvable'); toast('!', 'Dépôt introuvable — vérifiez le nom'); }
     else if (res.status === 401) { setSyncStatus('err', 'Token invalide'); toast('!', 'Token invalide'); }
