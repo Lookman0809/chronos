@@ -234,6 +234,13 @@ input,select,textarea{font-family:inherit}
 .stat-new{background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid rgba(96,165,250,.3)}
 .stat-done{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
 .stat-wip{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.sync-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-left:5px;vertical-align:middle;flex-shrink:0}
+.sync-ok{background:#4ade80}.sync-err{background:#f43f5e}.sync-ing{background:#fbbf24;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.gh-guide{background:var(--bg-600);border:1px solid var(--b1);border-radius:var(--r3);padding:16px;margin-top:12px;font-size:12.5px;line-height:1.7;color:var(--t3)}
+.gh-guide ol{margin:8px 0 0 16px;padding:0}
+.gh-guide li{margin-bottom:6px}
+.gh-guide a{color:var(--a4)}
 /* Toast */
 #toast{position:fixed;bottom:22px;right:22px;background:var(--bg-700);border:1px solid var(--b2);border-radius:var(--r3);padding:11px 18px;font-size:13.5px;color:var(--t1);box-shadow:var(--sh3);transform:translateY(80px);opacity:0;transition:all .3s ease;z-index:400;display:flex;align-items:center;gap:9px}
 #toast.show{transform:translateY(0);opacity:1}
@@ -331,6 +338,7 @@ input,select,textarea{font-family:inherit}
     <div class="ni" onclick="sv('contact')" data-v="contact"><span class="ni-ico">✉️</span><span>Contact</span></div>
     <div class="ni" id="ni-dev" onclick="sv('dev')" data-v="dev" style="display:none"><span class="ni-ico">🔧</span><span>DEV <span class="dev-badge">DEV</span></span></div>
   </div>
+  <div id="sidebar-sync-indicator" style="padding:2px 18px 6px;font-size:11px;color:var(--t4);display:none"><span id="sidebar-sync-dot" class="sync-dot sync-ok"></span> <span id="sidebar-sync-msg">Synchronisé</span></div>
   <div style="padding:0 10px 8px"><div class="ni" onclick="sv('settings')" data-v="settings"><span class="ni-ico">⚙</span><span>Paramètres</span></div></div>
   <div class="sb-bal" id="sb-bal"></div>
 </nav>
@@ -700,6 +708,39 @@ input,select,textarea{font-family:inherit}
       </div>
     </div>
 
+    <!-- Synchronisation GitHub -->
+    <div class="stsec">
+      <div class="stlbl" style="display:flex;align-items:center;gap:8px">
+        Synchronisation GitHub
+        <span id="sync-status-dot" class="sync-dot" style="display:none"></span>
+        <span id="sync-status-txt" style="font-size:11px;color:var(--t4);font-weight:400"></span>
+      </div>
+      <div class="srow"><div><div class="srlbl">Dépôt GitHub</div><div class="srdesc">Format : username/chronos-data</div></div>
+        <input class="srinp" id="s-gh-repo" type="text" placeholder="ex : jean/chronos-data">
+      </div>
+      <div class="srow"><div><div class="srlbl">Token d'accès</div><div class="srdesc">Token personnel GitHub (ghp_...)</div></div>
+        <input class="srinp" id="s-gh-token" type="password" placeholder="ghp_xxxxxxxxxxxx">
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn btn-g btn-sm" onclick="syncFromGitHub(true)">↓ Récupérer</button>
+        <button class="btn btn-g btn-sm" onclick="syncToGitHub(true)">↑ Envoyer</button>
+        <button class="btn btn-g btn-sm" onclick="testGitHubConnection()">Tester</button>
+      </div>
+      <details style="margin-top:12px">
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--a4);font-weight:600">📖 Comment configurer ?</summary>
+        <div class="gh-guide">
+          <ol>
+            <li>Crée un compte sur <a href="https://github.com" target="_blank">github.com</a> si tu n'en as pas</li>
+            <li>Crée un nouveau dépôt <strong>public ou privé</strong> nommé <code>chronos-data</code></li>
+            <li>Va dans <a href="https://github.com/settings/tokens/new" target="_blank">Paramètres → Tokens → Nouveau token</a></li>
+            <li>Nom : <code>Chronos</code> — coche uniquement <strong>repo</strong> → Générer</li>
+            <li>Copie le token (<code>ghp_...</code>) et colle-le ci-dessus</li>
+            <li>Entre ton dépôt au format <code>username/chronos-data</code></li>
+          </ol>
+          <div style="margin-top:8px;color:var(--t4)">⚠️ Le token n'est jamais exporté ni partagé — il reste uniquement sur cet appareil.</div>
+        </div>
+      </details>
+    </div>
     <!-- Export / Import -->
     <div class="stsec">
       <div class="stlbl">Export / Import</div>
@@ -808,15 +849,15 @@ const WFR=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 // ════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════
-const APP_VERSION='1.3.0';
+const APP_VERSION='1.4.0';
 let S={
-  settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[]},
+  settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[],githubRepo:'',githubToken:''},
   events:[],
   cetTransfers:[]
 };
 function loadS(){try{const d=localStorage.getItem('chronos_v4');if(d){S=JSON.parse(d);if(!S.cetTransfers)S.cetTransfers=[];if(!S.settings.customHolidays)S.settings.customHolidays={};else S.settings.customHolidays={}; // Supprimé de l'UI — nettoyageif(!S.settings.cpInHours){S.settings.cpBal*=7;S.settings.cpInHours=true;}if(!S.settings.hireDate)S.settings.hireDate='';if(!S.settings.nni)S.settings.nni='';
-  if(!S.settings.dismissedSuggs)S.settings.dismissedSuggs=[];if(S.settings.congeParental===undefined)S.settings.congeParental=false;if(!S.settings.rttRefDate)S.settings.rttRefDate='2026-01-19';if(!S.settings.hoursPerDay)S.settings.hoursPerDay=8;}}catch(e){}}
-function saveS(){localStorage.setItem('chronos_v4',JSON.stringify(S))}
+  if(!S.settings.dismissedSuggs)S.settings.dismissedSuggs=[];if(S.settings.congeParental===undefined)S.settings.congeParental=false;if(!S.settings.rttRefDate)S.settings.rttRefDate='2026-01-19';if(!S.settings.hoursPerDay)S.settings.hoursPerDay=8;if(!S.settings.githubRepo)S.settings.githubRepo='';if(!S.settings.githubToken)S.settings.githubToken='';}}catch(e){}}
+function saveS(){localStorage.setItem('chronos_v4',JSON.stringify(S));if(S.settings.githubRepo&&S.settings.githubToken){syncToGitHub(false);}}
 
 // ════════════════════════════════════════
 // FRENCH PUBLIC HOLIDAYS
@@ -2071,6 +2112,8 @@ function loadSett(){
   if(document.getElementById('s-hire-m'))document.getElementById('s-hire-m').value=_hdP[1]||'';
   if(document.getElementById('s-hire-y'))document.getElementById('s-hire-y').value=_hdP[0]||'';
   document.getElementById('s-contract').value=s.contractType||'35h';
+  if(document.getElementById('s-gh-repo'))document.getElementById('s-gh-repo').value=s.githubRepo||'';
+  if(document.getElementById('s-gh-token'))document.getElementById('s-gh-token').value=s.githubToken||'';
   document.getElementById('s-rttref').value=s.rttRefDate||'2026-01-19';
   document.getElementById('s-parental').checked=s.congeParental||false;
   updContrat();
@@ -2114,6 +2157,8 @@ function saveSett(){
   S.settings.contractType=document.getElementById('s-contract').value;
   S.settings.rttRefDate=document.getElementById('s-rttref').value||'2026-01-19';
   S.settings.congeParental=document.getElementById('s-parental').checked;
+  S.settings.githubRepo=(document.getElementById('s-gh-repo')?.value||'').trim();
+  S.settings.githubToken=(document.getElementById('s-gh-token')?.value||'').trim();
   saveS();toast('✓','Paramètres enregistrés');renderAll();
 }
 
@@ -2226,7 +2271,7 @@ function applyImportProfil(parsed){
   showConfirm('📥','Importer ce profil ? Vos paramètres actuels seront remplacés. Les événements sont conservés.','Importer',()=>{
     const imported=parsed.settings||{};
     // Migration V1 : appliquer les champs connus, ignorer les inconnus
-    const keys=['userName','nni','contractType','hireDate','hoursPerDay','cpBal','cpInHours','rttRefDate','rttInitBal','customHolidays','congeParental','dismissedSuggs'];
+    const keys=['userName','nni','contractType','hireDate','hoursPerDay','cpBal','cpInHours','rttRefDate','rttInitBal','customHolidays','congeParental','dismissedSuggs']; // githubToken exclu volontairement
     keys.forEach(k=>{if(imported[k]!==undefined)S.settings[k]=imported[k];});
     saveS();loadSett();renderAll();
     toast('✓',`Profil importé (exporté le ${parsed.__exported_at||'?'})`);
@@ -2292,7 +2337,7 @@ function closeOnboarding(){
 function resetData(){
   showConfirm("⚠️","Réinitialiser toute l'application ? Cette action est irréversible — tous les événements, poses CET et paramètres seront effacés.","Tout effacer",()=>{
     localStorage.removeItem('chronos_v4');
-    S={settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[]},events:[],cetTransfers:[]};
+    S={settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[],githubRepo:'',githubToken:''},events:[],cetTransfers:[]};
     saveS();loadSett();renderAll();toast('🗑','Application réinitialisée');
   });
 }
@@ -2894,6 +2939,122 @@ async function deleteTicket(id) {
 }
 // ════ FIN CONFIG DEV ════
 
+
+// ════════════════════════════════════════
+// SYNCHRONISATION GITHUB v1.4.0
+// ════════════════════════════════════════
+
+function ghApiUrl(path) {
+  return 'https://api.github.com/repos/' + S.settings.githubRepo + '/contents/' + path;
+}
+function ghHeaders() {
+  return { 'Authorization': 'token ' + S.settings.githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' };
+}
+function b64Encode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64Decode(str) {
+  return decodeURIComponent(escape(atob(str.replace(/\s/g,''))));
+}
+
+function setSyncStatus(state, msg) {
+  const dot = document.getElementById('sync-status-dot');
+  const txt = document.getElementById('sync-status-txt');
+  const sdot = document.getElementById('sidebar-sync-dot');
+  const smsg = document.getElementById('sidebar-sync-msg');
+  const sind = document.getElementById('sidebar-sync-indicator');
+  if (sind && S.settings.githubRepo) sind.style.display = 'block';
+  const cls = state === 'ok' ? 'sync-ok' : state === 'err' ? 'sync-err' : 'sync-ing';
+  if (dot) { dot.style.display = 'inline-block'; dot.className = 'sync-dot ' + cls; }
+  if (txt) txt.textContent = msg;
+  if (sdot) sdot.className = 'sync-dot ' + cls;
+  if (smsg) smsg.textContent = msg;
+}
+
+async function ghGetFile(path) {
+  const res = await fetch(ghApiUrl(path), { headers: ghHeaders() });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('GitHub ' + res.status);
+  const data = await res.json();
+  return { content: JSON.parse(b64Decode(data.content)), sha: data.sha };
+}
+
+async function ghPutFile(path, content, sha) {
+  const body = { message: 'Chronos sync ' + todayStr(), content: b64Encode(JSON.stringify(content)) };
+  if (sha) body.sha = sha;
+  const res = await fetch(ghApiUrl(path), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+  if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'GitHub ' + res.status); }
+}
+
+async function testGitHubConnection() {
+  if (!S.settings.githubRepo || !S.settings.githubToken) { toast('!', 'Dépôt et token requis'); return; }
+  setSyncStatus('ing', 'Test...');
+  try {
+    const res = await fetch('https://api.github.com/repos/' + S.settings.githubRepo, { headers: ghHeaders() });
+    if (res.ok) { setSyncStatus('ok', 'Connexion OK'); toast('✓', 'Connexion GitHub OK'); }
+    else if (res.status === 404) { setSyncStatus('err', 'Dépôt introuvable'); toast('!', 'Dépôt introuvable — vérifiez le nom'); }
+    else if (res.status === 401) { setSyncStatus('err', 'Token invalide'); toast('!', 'Token invalide'); }
+    else { setSyncStatus('err', 'Erreur ' + res.status); }
+  } catch(e) { setSyncStatus('err', 'Erreur réseau'); toast('!', 'Erreur réseau'); }
+}
+
+async function syncToGitHub(manual) {
+  if (!S.settings.githubRepo || !S.settings.githubToken) { if (manual) toast('!', 'Configurez dépôt et token dans Paramètres'); return; }
+  if (manual) setSyncStatus('ing', 'Envoi...');
+  try {
+    const now = new Date().toISOString();
+    // Profil
+    const profil = { __chronos: 'PROFIL_V1', __exported_at: now, __nni: S.settings.nni, settings: S.settings };
+    profil.__checksum = calcChecksum({ ...profil, __checksum: undefined });
+    const existing_p = await ghGetFile('profil.json');
+    await ghPutFile('profil.json', profil, existing_p ? existing_p.sha : undefined);
+    // Historique
+    const hist = { __chronos: 'HISTORIQUE_V1', __exported_at: now, __nni: S.settings.nni, events: S.events, cetTransfers: S.cetTransfers };
+    hist.__checksum = calcChecksum({ ...hist, __checksum: undefined });
+    const existing_h = await ghGetFile('historique.json');
+    await ghPutFile('historique.json', hist, existing_h ? existing_h.sha : undefined);
+    setSyncStatus('ok', 'Synchronisé ' + fmtD(now.slice(0,10), {day:'numeric',month:'short'}));
+    if (manual) toast('✓', 'Données envoyées vers GitHub');
+  } catch(e) {
+    setSyncStatus('err', 'Erreur sync');
+    if (manual) toast('!', 'Erreur : ' + e.message);
+    console.error('sync error', e);
+  }
+}
+
+async function syncFromGitHub(manual) {
+  if (!S.settings.githubRepo || !S.settings.githubToken) { if (manual) toast('!', 'Configurez dépôt et token dans Paramètres'); return; }
+  setSyncStatus('ing', 'Récupération...');
+  try {
+    const remote_p = await ghGetFile('profil.json');
+    const remote_h = await ghGetFile('historique.json');
+    if (!remote_p && !remote_h) { setSyncStatus('ok', 'Aucune donnée distante'); if (manual) toast('!', 'Aucune donnée trouvée sur GitHub'); return; }
+    const localDate = S.events.length ? (S.events[S.events.length-1].date || '') : '';
+    const remoteDate = remote_h ? (remote_h.content.__exported_at || '') : '';
+    // Prendre la plus récente
+    if (!manual && remoteDate <= localDate) { setSyncStatus('ok', 'Déjà à jour'); return; }
+    if (remote_p) {
+      const keys = ['userName','nni','contractType','hireDate','hoursPerDay','cpBal','cpInHours','rttRefDate','rttInitBal','customHolidays','congeParental','dismissedSuggs','githubRepo','githubToken'];
+      const imp = remote_p.content.settings || {};
+      keys.forEach(k => { if (imp[k] !== undefined) S.settings[k] = imp[k]; });
+    }
+    if (remote_h) {
+      S.events = remote_h.content.events || [];
+      S.cetTransfers = remote_h.content.cetTransfers || [];
+    }
+    localStorage.setItem('chronos_v4', JSON.stringify(S));
+    setSyncStatus('ok', 'Synchronisé');
+    if (manual) { toast('✓', 'Données récupérées depuis GitHub'); renderAll(); loadSett(); }
+    else renderAll();
+  } catch(e) {
+    setSyncStatus('err', 'Erreur sync');
+    if (manual) toast('!', 'Erreur : ' + e.message);
+    console.error('sync error', e);
+  }
+}
+
+// ════ FIN SYNCHRONISATION GITHUB ════
+
 async function checkUpdate(){
   try{
     const res=await fetch('https://lookman0809.github.io/chronos/version.json?t='+Date.now(),{cache:'no-store'});
@@ -3351,6 +3512,7 @@ function init(){
   // Vérifier les mises à jour (silencieux)
   setTimeout(checkUpdate, 1500);
   checkDevHash();
+  if(S.settings.githubRepo&&S.settings.githubToken)syncFromGitHub(false);
   // Premier lancement : aucun profil configuré
   const s=S.settings;
   if(!s.userName&&!s.nni&&!s.hireDate){
