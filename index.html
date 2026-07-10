@@ -321,7 +321,7 @@ input,select,textarea{font-family:inherit}
 <button id="hamburger" onclick="toggleSidebar()">☰</button>
 <div id="sb-overlay" onclick="closeSidebar()"></div>
 <nav id="sb">
-  <div class="logo" onclick="eggLogo()" style="cursor:pointer">
+  <div class="logo" id="logo-btn" style="cursor:pointer">
     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAIAAAC3cQTlAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAANrUlEQVR42u1aaZBc1XX+zrn3db/unlUzGmlgkBAI24oMSDLYoiiMHBvZBlyYijGEOBFxDFRsTBFwcBwWQRlcJnYgJAbbxHaREBMUjNksZPYlCCMNyyAkNiGQLGk0G5qtu6f7vXvPyY/Xs1gImBajFOWaW/2j+1Xf9953zz3f+c45l0QEfyyD8Uc0psFMg5kGMw1mGsw0mP057JTcxXtRVWZmpqomiqiIEJPhKVhWmhI5Q1TBoKr/PxP3yzZTVSL61eqnz/3mjza+up2IRHSSNiGiZ17Ycu43frTmkeeJSN4/HtnX4UVi573Ijs6+YN5XgBM++WdXqGocO++99+InDOf9Hj+d8977RSd8Gzih6fBzBgbz3otzXt7HsPtkDXjRwBIbBjCULynIzm4aKsQArDVjm+i9PM0XSpFtbXLOFUfK9XW5ZIpzwjy+A/cjAYioMcxM3ktPfymwTAQCxc5bQ85Lz+4RojEkuvfFAIiosTawhl0sxAaKnt0F8dIyI2ctJ6RSLZ3YKpHAGO58q3TtbW8+sL5nW1dx3gHZn114sDEUe8mGZv2mvuXnP5TNGFVARcUneAiiKgSoCiBQRLF/6MYvZMIAgsDyrr7hL128anCo1DYrd+Jxh1244uMzG3NehKuxj63WJr/b1H/apRt27sxThtT5waIXRfJEZoq8FAqxKEQVUKhAlQhQDxVVUZUEXlSOY5e8qzKRiA4W4v7hqD8fbXjxf2+7b+Ovr//S4gWtVdlnsmwmCmbe2Vc69dKNO/uiuuYwFwZkOGXZexWBDWzsPAFkrbXGWgoMB9YElgPL1hhrbGBNYI01JjBsA0OEyDlr2XsR1SCwxnImDOpm1m7dMXTqBXf09heIafIkN1kwKkqEf7pte3e3q69Lx44FzMbkS9LcmE2njOvpOWBmHRujsSciKAMEkIJFScBKrDAAAwSCKztj7eymWtfTXZsL6mqzxRHHxig0iqWuMbNtS9/1t6xjIj/pSDipbaaAsVyK/H3rhjhrYyViUvhMiM7u0iMvlh+/7e8ffbjjjDM/860fv87WAETEiW+AAAURKYSUQIYBYmLwjbdv+vcfnvurow/7/MnHrHrgjeHBKFef9t4Tq3NCmfQ9j71+xTeOt4anUgGogpl+31M6/G9eKMXeMKACFYJAXRzHKz7XtnB+w+ontj28flcua1SUAJBU/ARCinEXSq4w8sOlTy9tO/GTh67r2P4/97+SCe2oFFCCjyPXWJfadOfXZjbWiMhkmHqylgHgvXolZkOkIDXEpARVy/qzu7ciKnPIjXWhF6HKUnoooKrKgCYbTDUBRlBtqA8fad/+8ONbkLYNdRkRTZCIeBECkwjE7784QwwIM+XzMcox1AMK9SCCCSSS3eUIFb5SQKAusQYgiedBBARAIR7qwYC1cDKwewRaMR1SXJMLnBdiA9o/YIiIiJWQL7rjF9ct/UjOkCKhYChBVStvPPoCSUhRrYSaxErJhhmbCCSzIGMCfG3Hzic7dqVTAbGZ+qA5FsyN4fxwfM4pzT+9YP7+S0tUZcVl9//X3S831qWBqQ6aWoFEXjjMBt8+/UAApcgbHhcue0QDGl0AHb/HuAsr9J0Fm4Zpe9FffezWNZtFq9Nn1fgMQYjDMEgFDCCwzISK0wLGTHhX1SQPYAZXoh4B8FL5Zg2/UyhM/h6mbJCyolDabwRAzMqVZWVCOXI7ekeSbZ9OcVtLjpmcl+3dBecVgCG0zcol4Dt7R/IjjhkiOrspU5dLvVNCRoAqFASqLt2qMjkzhq1JKJ8IsdM4Fi/qvZYjSbIr7zWKRLyKaBSL8wKQKsqxd6IiiJ2UI3kHRT0xAyUaDy40xQQAIiYm0rHfCSQGlDExhyeqBH4Q6YSLDBCURr1HRb2CAOKKNUShqsyAwhjLbCa63FQSAAAyTDz2SxN/EFFVmIrBwAQiOC8EAiHRxQn0RG3oBA2+B/WacV2rxUKUspRQjE7ONFX6jCXiZNkhgmxoD27NJbvLGsNEqmotHzQr57wQwIbClElc44CZ2Sj2BHjR2lwawObfDzzyTNezrw7s6B0pRVKXS81vq1n60aZli1sWHDLjtmtOuOrnz5ZjnxDpFG8zIrBh5lEuBgjIhMEEDqtcD9P2DwsXSNgvsKwKItqwue+am1/89eM7Sl1FECFtYQwcECvSqQPmN/315w9a+dWPfHHZ3FIkqpNl6Oq2GRuD8W2GpKSiqgCNZVBMgEopVoWmLTNzglIEomoNX/fLjktveLbYNdIwr/60ryw4fvGsua25VMD5EXl569CDz/Td37776utfuvXBXb+45Mhli5qdE2MmhWZSqlkUhmlbb3TUJb2B0farZx84w6qiHLvOvlFqDqh1Zo6Jdufdqd/v2tkXsfpsgLsuO2je7NCLqqi1fNF1a6/9yXOoSV3wFx+94M+PmNta+/bHrdvU992bX1/9SE9Ql77l8iNO/1Sr82ImkW9WQ80JVdIYtyGKfank4lji2I+UvRclQt+QPPWaf7MHW3uw4bXy9t444Wtr+fv/8dy1P36uYXburmuXX3fhsXNba+PYOy/Pb9x686rHnJco9l70Ewubf/ODpVd8c0Ec0YqrX3liQ781PJkMrcqoZJntuJIlImZiAjExE0ajfm2Nra0JarLG5lLMBkAq4PWbulb+a3umPrXqms+ccvy8KPZeBFBr+PbfrDvv8v+0hhNV4bx4ryvPOuzyc+aX83z2dW8OFhwR3jN/5mriDIwlG4yDSQoR3qsXGStrBJYi0FBRB4rkYkqnNKHay25sj94q/OPfLlm+dE459oHlscpLOhU01OXGs1omIsROrlwxb/mftry2Kbrh3h5m8u9VK62SAJiJKhYQ0UzazJmdSyJdEBhrSFXnNJvf/kNj94CHaEOOjpwXAli/sevBx7fOP3LmhWce6UWD8UyYKlVFL3swZyICrj6r7dFnSjfdP3D+KS250L47s1WTzwBkiHiCxiCqyab2oGYCHffhzNgs5wTAnY9t1cHSii98OBumYifW0MSFEpWEZia+p2F40aM+VHvsUfWPrR1e+3Lxs0vqvKh5ZzTV+QwxwbxN5++F/dSLelFRTapeT3V0oSb16U8cpLqXWZkUMyvTnr2AxOmXL66l2Dz9ahmAvquKrlY101hJLtnWvf3lJAtIp3hmQ5gYqKe/lKhmJsxuzhZL8RudQ7nmzCEH1FJF4FSMwsZEsbR3tw3WnrxhW+mIuWE58onKHlusBXNCDe2bve5dlm8fqBmUCEoCoERUKvv+oXK+GA8Xo4HhyIsSUex1YCgaLsT5Ytw/FDkvUeyKJVebCbLjcqGSzxmmbT0jd65DQed+/YcvDg4NpVNGREb7IgqgPsuwPFySqaHmUackY4lNos2owm+GDJNlNlwhCgKMIctkmKwhKAJr0ilTLEs58hMJhQgievCszN99ueXYo8OX1t51yKKvr7rnKWOMMTx6M4xEAJlM2k4NmLGNbFLMAY0WXwCF9+q8Oi9expWt8xp7cU4S1s6GQWtTzdBAeWdvcWKCneQCgaVrzzn4yR/M67jnvGXLFp9x2vdOPOPqzW90ItHjwOZuR8RzW4J3T4EmbRkCgJo01Wa54Lh/RFVJRLOhnd2UaW5INzeEs2aEhiuqeVZTprkhbG4MZzVnDDMRLVnQQsPyREdXwlp7dnu8eqE5ba13/OKie1df+WzHlk99+ao4jq0hgj7xSqwps+TQ9JR1zrwXUX/mLfn67wze9LuiqkYuqeqPj7E/T7wYO6+qdzz6Jv7kJ0efdU+lZ7a3RzjvY+dUdShfbO/Y7JyI6Gu7yjPO7mw7b1f3YKyq/l07a1V0AQh80kKTsvTL5/zAiA8MxT5pF6uITuxIjl8UTZKczy1tW7iopX191y1rthjDSfB5WymDDLNzvjaXOerI+aIg0n9eU9g9pGccG7bUWed1atiMGar44sLUxw+mV3r1ontL+bIPDDHTWFlNRz97DOc1G9pLViyCDS7+tw0b3xhIBSZ2e5daxrD3Uop8YOm/1xVuXhvPbbPnL8/tNUDtOXflypWTJDRRpC0fPhsPbXYvdNLT21xDqLNqKQzG9fReP4l6P/zQxp1D5Sfb+3777O7jFjW1tWQTnGNxX5HUAGANW8O3txfOv3Wk5HDDX9YcOz8U1fdMAqo7B5AkNu3bo4tXlzd1IWX00BncWkcBJ1VirdRcZcyZSEWgSGTIcL709NpXigODdfW1V371Q187sTUd7KUAu2vQ/csDhZuecCOxXHVq+K3P1jqvk+lrVH2oIcHTV3A/Xx/f/6rbulvzZYhAVcUrhFRUVCAQDxX1IioCkIiSauDjUs8OGSxCgyWLZpy+rOW4hbkDm4O0peGSbOn2D70c3d3hNnfJrGbz3VPCs4/LOo9Jdmj25YRGggfQfNlveUv6Cuon1sH1DwoC45WBSs8dUOnsHPzp6t6Ol8rwAerDmvp0mDYjjgoFQE2m2Z60OPWdk7JL5qS96ORbzvt43CSpcVmDqgrbE8dI5O5bP7jmufzz23z3EDnimoydM9Mcc1j65I9ljpmfBmiSu2tqzs4o9k5fkzmkElgeq/kPFMV5DVNUG3JCsEnsr/IYwBQdBNpX2ypAZsJhDFH1AgLMPp3poQ/CIe1xtUbv6z4WH4DxPjHsaxfggz2mwUyDmQYzDWYazDSY/Tn+D53oxP12WZgsAAAAAElFTkSuQmCC" style="width:42px;height:42px;object-fit:contain;flex-shrink:0;border-radius:10px">
     <div><span class="logo-txt">Chronos</span><div style="font-size:9.5px;color:var(--t4);letter-spacing:.04em;margin-top:1px">v<span id="app-ver"></span></div></div>
   </div>
@@ -857,9 +857,9 @@ const WFR=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 // ════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════
-const APP_VERSION='1.4.2';
+const APP_VERSION='1.4.3';
 let S={
-  settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[],githubRepo:'',githubToken:''},
+  settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[],githubRepo:'',githubToken:'',lastSyncAt:''},
   events:[],
   cetTransfers:[]
 };
@@ -1324,6 +1324,7 @@ function renderBCards(){
     <div class="bbar"><div class="bbar-f" style="width:${cp}%;background:${ET.conges.hex}"></div></div>
     <div class="bused"><span>≈ ${fmtN(cuJ)} j utilisés</span><span>${fmtH(cu)} / ${fmtH(ct)}</span></div>
     ${caAlert}${caRemAlert}
+    ${(crJ<=0&&ct>0)?'<div style="font-size:11px;margin-top:7px;padding:5px 10px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);border-radius:6px;color:#fbbf24;text-align:center">🏆 Champion des congés.</div>':''}
   </div>
   <div class="bc" style="--cc:${ET.rtt.hex}">
     <div class="bc-lbl">${ET.rtt.icon} RTT — cycle actuel</div>
@@ -1367,7 +1368,7 @@ function renderSBal(){
   el.innerHTML=`
   <div style="font-size:10px;font-weight:700;color:var(--t4);letter-spacing:.1em;text-transform:uppercase;padding:4px 11px 6px">En cours :</div>
   <div class="bp" style="background:var(--cp-b)"><span class="bp-n">${ET.conges.icon} CA</span><span class="bp-v" style="color:var(--cp-c)">${fmtH(cpRem())}</span></div>
-  <div class="bp" style="background:var(--rtt-b)"><span class="bp-n">${ET.rtt.icon} RTT</span><span class="bp-v" style="color:var(--rtt-c)">${fmtN(rttBal())}j</span></div>
+  <div class="bp" style="background:var(--rtt-b)" onclick="eggRTTClick()"><span class="bp-n">${ET.rtt.icon} RTT</span><span class="bp-v" style="color:var(--rtt-c)">${fmtN(rttBal())}j</span></div>
   <div class="bp" style="background:var(--fl-b)"><span class="bp-n">${ET.fl.icon} FL</span><span class="bp-v" style="color:var(--fl-c)">${fmtN(flRem(new Date().getFullYear()))}j</span></div>
   <div class="bp" style="background:var(--cet-b)"><span class="bp-n">🏦 CET</span><span class="bp-v" style="color:var(--cet-c)">${fmtN(cetTotal())}j</span></div>
   ${S.settings.congeParental?`<div class="bp" style="background:var(--cpar-b)"><span class="bp-n">👨‍👩‍👧 CP</span><span class="bp-v" style="color:var(--cpar-c)">${fmtN(cparsRem())}j</span></div>`:''}
@@ -2345,7 +2346,7 @@ function closeOnboarding(){
 function resetData(){
   showConfirm("⚠️","Réinitialiser toute l'application ? Cette action est irréversible — tous les événements, poses CET et paramètres seront effacés.","Tout effacer",()=>{
     localStorage.removeItem('chronos_v4');
-    S={settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[],githubRepo:'',githubToken:''},events:[],cetTransfers:[]};
+    S={settings:{userName:'',contractType:'35h',nni:'',cpBal:175,rttRefDate:'2026-01-19',rttInitBal:0,customHolidays:{},cpInHours:true,hireDate:'',hoursPerDay:8,congeParental:false,dismissedSuggs:[],githubRepo:'',githubToken:'',lastSyncAt:''},events:[],cetTransfers:[]};
     saveS();loadSett();renderAll();toast('🗑','Application réinitialisée');
   });
 }
@@ -2719,12 +2720,11 @@ function repopulateYears(){
 // EASTER EGGS
 // ════════════════════════════════════════
 
-// ── Easter egg 1 : clic sur le logo ──
-function eggLogo() {
-  toast('⏱', 'Arrête de cliquer sur le logo et retourne travailler.');
-}
+// ════════════════════════════════════════
+// EASTER EGGS v1.4.3
+// ════════════════════════════════════════
 
-// ── Easter egg 2 : débloquer les Suggestions ──
+// ── Suggestions : état session ──
 let suggestionsUnlocked = false;
 
 function unlockSuggestions() {
@@ -2737,29 +2737,81 @@ function unlockSuggestions() {
   toast('✨', 'Suggestions débloquées');
 }
 
-// Option A : taper RTT au clavier
+// ── Logo : 5 taps = Suggestions | long press 10s = DEV ──
+let logoTapCount = 0, logoTapTimer = null, logoLongTimer = null;
+(function() {
+  const logo = document.getElementById('logo-btn');
+  if (!logo) return;
+
+  function startLong() {
+    logoLongTimer = setTimeout(function() {
+      // Long press 10s → ouvrir modal DEV
+      const ov = document.getElementById('dev-login-overlay');
+      if (ov) {
+        ov.style.display = 'flex';
+        setTimeout(function() { const i = document.getElementById('dev-nni-input'); if(i) i.focus(); }, 100);
+      }
+    }, 10000);
+  }
+  function cancelLong() { clearTimeout(logoLongTimer); }
+
+  function onTap() {
+    // 5 taps rapides = suggestions
+    logoTapCount++;
+    clearTimeout(logoTapTimer);
+    logoTapTimer = setTimeout(function() { logoTapCount = 0; }, 2500);
+    if (logoTapCount >= 5) {
+      logoTapCount = 0;
+      unlockSuggestions();
+    } else {
+      toast('⏱', 'Arrête de cliquer sur le logo et retourne travailler.');
+    }
+  }
+
+  // Tactile
+  logo.addEventListener('touchstart', function(e) { startLong(); }, {passive:true});
+  logo.addEventListener('touchend',   function(e) { cancelLong(); onTap(); }, {passive:true});
+  logo.addEventListener('touchmove',  function(e) { cancelLong(); }, {passive:true});
+  // Souris
+  logo.addEventListener('mousedown',  function(e) { startLong(); });
+  logo.addEventListener('mouseup',    function(e) { cancelLong(); });
+  logo.addEventListener('mouseleave', function(e) { cancelLong(); });
+  logo.addEventListener('click',      function(e) { onTap(); });
+})();
+
+// ── RTT clavier : ignorer si focus dans un champ ──
 let eggBuffer = '';
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeModal(); closeConfirm(); }
   if (!suggestionsUnlocked) {
+    const tag = (document.activeElement ? document.activeElement.tagName : '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
     eggBuffer += e.key.toUpperCase();
     if (eggBuffer.length > 3) eggBuffer = eggBuffer.slice(-3);
     if (eggBuffer === 'RTT') unlockSuggestions();
   }
 });
 
-// Option B : triple-clic sur le slogan
-let sloganClicks = 0, sloganTimer = null;
-function eggSlogan() {
-  if (suggestionsUnlocked) return;
-  sloganClicks++;
-  clearTimeout(sloganTimer);
-  sloganTimer = setTimeout(() => { sloganClicks = 0; }, 600);
-  if (sloganClicks >= 3) {
-    sloganClicks = 0;
-    unlockSuggestions();
+// ── Easter egg RTT sidebar : 3 clics ──
+let rttClickCount = 0, rttClickTimer = null;
+function eggRTTClick() {
+  rttClickCount++;
+  clearTimeout(rttClickTimer);
+  rttClickTimer = setTimeout(function() { rttClickCount = 0; }, 800);
+  if (rttClickCount >= 3) {
+    rttClickCount = 0;
+    toast('😏', 'Non, les RTT ne se multiplient pas comme ça.');
   }
 }
+
+// ── Easter egg heure tardive ──
+(function() {
+  const h = new Date().getHours();
+  if (h >= 0 && h < 5) {
+    setTimeout(function() { toast('🌙', "T'es sérieux là ? Dors."); }, 2000);
+  }
+})();
+
 // ════ FIN EASTER EGGS ════
 
 
@@ -3080,6 +3132,8 @@ async function syncToGitHub(manual) {
   if (manual) setSyncStatus('ing', 'Envoi...');
   try {
     const now = new Date().toISOString();
+    S.settings.lastSyncAt = now;
+    localStorage.setItem('chronos_v4', JSON.stringify(S));
     // Profil
     const profil = { __chronos: 'PROFIL_V1', __exported_at: now, __nni: S.settings.nni, settings: S.settings };
     profil.__checksum = calcChecksum({ ...profil, __checksum: undefined });
@@ -3106,10 +3160,10 @@ async function syncFromGitHub(manual) {
     const remote_p = await ghGetFile('profil.json');
     const remote_h = await ghGetFile('historique.json');
     if (!remote_p && !remote_h) { setSyncStatus('ok', 'Aucune donnée distante'); if (manual) toast('!', 'Aucune donnée trouvée sur GitHub'); return; }
-    const localDate = S.events.length ? (S.events[S.events.length-1].date || '') : '';
+    const localDate = S.settings.lastSyncAt || '';
     const remoteDate = remote_h ? (remote_h.content.__exported_at || '') : '';
-    // Prendre la plus récente
-    if (!manual && remoteDate <= localDate) { setSyncStatus('ok', 'Déjà à jour'); return; }
+    // Prendre la plus récente — si appareil vierge (pas de lastSyncAt) on importe toujours
+    if (!manual && localDate && remoteDate && remoteDate <= localDate) { setSyncStatus('ok', 'Déjà à jour'); return; }
     if (remote_p) {
       const keys = ['userName','nni','contractType','hireDate','hoursPerDay','cpBal','cpInHours','rttRefDate','rttInitBal','customHolidays','congeParental','dismissedSuggs','githubRepo','githubToken'];
       const imp = remote_p.content.settings || {};
