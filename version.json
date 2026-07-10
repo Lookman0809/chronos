@@ -1,5 +1,5 @@
 {
-  "version": "1.4.3",
+  "version": "1.5.0",
   "url": "https://lookman0809.github.io/chronos/index.html",
-  "changelog": "Fix sync mobile, easter eggs, RTT clavier amélioré"
+  "changelog": "Vue détail événement, export PDF, splash screen, changelog, améliorations majeures"
 }
